@@ -2,7 +2,7 @@
 
 namespace YdbPlatform\Ydb\Logger;
 
-class SimpleFileLogger implements \Psr\Log\LoggerInterface
+class SimpleFileLogger implements LoggerInterface
 {
     const DEBUG = 7;
     const INFO = 6;
@@ -12,6 +12,8 @@ class SimpleFileLogger implements \Psr\Log\LoggerInterface
     const CRITICAL = 2;
     const ALERT = 1;
     const EMERGENCY = 0;
+
+    public $prefix = "";
 
     protected static $levels = [
         self::DEBUG     => 'DEBUG',
@@ -86,7 +88,7 @@ class SimpleFileLogger implements \Psr\Log\LoggerInterface
     {
         if ($level>$this->level) return;
         file_put_contents($this->file,
-            date("d/m/y H:i:s")." ".self::getLevelName($level). " ".$message." ".json_encode($context)."\n",
+            date("d/m/y H:i:s").$this->prefix." ".self::getLevelName($level). " ".$message." ".json_encode($context)."\n",
         FILE_APPEND);
     }
 }
