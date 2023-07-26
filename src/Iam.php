@@ -99,7 +99,7 @@ class Iam implements IamTokenContract
      */
     public function newToken()
     {
-        $this->logger()->info('YDB: Obtaining new IAM token...');
+        $this->logger()->info('YDB: Getting new token...');
 
         $tokenInfo = $this->config('credentials')->getTokenInfo();
         $this->iam_token = $tokenInfo->getToken();
@@ -110,7 +110,7 @@ class Iam implements IamTokenContract
             "expiresAt" => $tokenInfo->getExpiresAt(),
             "refreshAt" => $tokenInfo->getRefreshAt()
         ]);
-        $this->logger->debug("YDB DEBUG token:".json_encode($tokenInfo));
+        $this->logger()->info('YDB: Got new token ['.substr($tokenInfo->getToken(), -6).']');
         return $tokenInfo->getToken();
     }
 

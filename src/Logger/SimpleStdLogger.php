@@ -29,7 +29,7 @@ class SimpleStdLogger implements LoggerInterface
     protected static function getLevelName(int $level): string
     {
         if (!isset(static::$levels[$level])) {
-            throw new InvalidArgumentException('Level "'.$level.'" is not defined, use one of: '.implode(', ', array_keys(static::$levels)));
+            throw new \Exception('Level "'.$level.'" is not defined, use one of: '.implode(', ', array_keys(static::$levels)));
         }
 
         return static::$levels[$level];

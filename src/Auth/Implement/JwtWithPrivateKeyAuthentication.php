@@ -24,7 +24,9 @@ class JwtWithPrivateKeyAuthentication extends \YdbPlatform\Ydb\Auth\JwtAuth
 
     public function getTokenInfo(): TokenInfo
     {
+        $this->logger->debug("YDB: Generating new JWT token");
         $jwt_token = $this->getJwtToken();
+        $this->logger->debug("YDB: Generated new JWT token");
         $request_data = [
             'jwt' => $jwt_token,
         ];

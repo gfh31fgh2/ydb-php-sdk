@@ -68,11 +68,9 @@ class MemorySessionPool implements SessionPoolContract
     {
         $session = static::$sessions[$session_id] ?? null;
 
-        if ($session)
-        {
+        if ($session) {
             unset(static::$sessions[$session_id]);
-            if ($session->isAlive())
-            {
+            if ($session->isAlive()) {
                 $session->delete();
             }
         }

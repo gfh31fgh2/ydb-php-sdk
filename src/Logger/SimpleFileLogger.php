@@ -29,7 +29,7 @@ class SimpleFileLogger implements LoggerInterface
     protected static function getLevelName(int $level): string
     {
         if (!isset(static::$levels[$level])) {
-            throw new InvalidArgumentException('Level "'.$level.'" is not defined, use one of: '.implode(', ', array_keys(static::$levels)));
+            throw new \Exception('Level "'.$level.'" is not defined, use one of: '.implode(', ', array_keys(static::$levels)));
         }
 
         return static::$levels[$level];
@@ -89,6 +89,6 @@ class SimpleFileLogger implements LoggerInterface
         if ($level>$this->level) return;
         file_put_contents($this->file,
             date("d/m/y H:i:s").$this->prefix." ".self::getLevelName($level). " ".$message." ".json_encode($context)."\n",
-        FILE_APPEND);
+            FILE_APPEND);
     }
 }

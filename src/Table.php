@@ -4,7 +4,7 @@ namespace YdbPlatform\Ydb;
 
 use Closure;
 use Exception;
-use YdbPlatform\Ydb\Logger\LoggerInterface;
+use Psr\Log\LoggerInterface;
 use Ydb\Table\Query;
 use Ydb\Table\V1\TableServiceClient as ServiceClient;
 use YdbPlatform\Ydb\Contracts\SessionPoolContract;
@@ -47,9 +47,6 @@ class Table
      */
     protected static $session_pool;
 
-    /**
-     * @var LoggerInterface
-     */
     protected $logger;
     /**
      * @var Iam

@@ -3,8 +3,8 @@
 namespace YdbPlatform\Ydb\Auth;
 
 use DateTime;
+use Psr\Log\LoggerInterface;
 use YdbPlatform\Ydb\Iam;
-use YdbPlatform\Ydb\Logger\LoggerInterface;
 
 abstract class Auth
 {

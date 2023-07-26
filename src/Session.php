@@ -11,7 +11,6 @@ use Ydb\Table\QueryCachePolicy;
 use Ydb\Table\TransactionControl;
 use Ydb\Table\TransactionSettings;
 use Ydb\Table\SerializableModeSettings;
-use YdbPlatform\Ydb\Logger\LoggerInterface;
 
 class Session
 {
@@ -52,7 +51,7 @@ class Session
     protected $tx_id;
 
     /**
-     * @var LoggerInterface
+     * @var \Psr\Log\LoggerInterface|null
      */
     protected $logger;
 

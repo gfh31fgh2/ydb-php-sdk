@@ -1,3 +1,7 @@
+## 1.8.2
+* fixed discovery on exception
+* fixed logger in EnvironCredentials
+
 # 1.8.1
 
 * fixed bug, when function Retry::backoffType always return SlowBackoff

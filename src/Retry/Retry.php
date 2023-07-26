@@ -5,7 +5,7 @@ namespace YdbPlatform\Ydb\Retry;
 use Closure;
 use YdbPlatform\Ydb\Exception;
 use YdbPlatform\Ydb\Exceptions\RetryableException;
-use YdbPlatform\Ydb\Logger\LoggerInterface;
+use Psr\Log\LoggerInterface;
 
 class Retry
 {
@@ -77,7 +77,9 @@ class Retry
         $startTime = microtime(true);
         $retryCount = 0;
         $lastException = null;
-        while (microtime(true) < $startTime + $this->timeoutMs / 1000) {
+        $deadline = is_null($this->timeoutMs) ? PHP_INT_MAX : $startTime + $this->timeoutMs / 1000;
+        $this->logger->debug("YDB DEBUG run retry. Deadline: $deadline");
+        do {
             $this->logger->debug("YDB: Run user function. Retry count: $retryCount. s: ".(microtime(true) - $startTime));
             try {
                 $this->logger->debug("YDB DEBUG run \$closure in retry");
@@ -95,7 +97,7 @@ class Retry
                 $this->logger->debug("YDB DEBUG sleep".$delay);
                 usleep($delay);
             }
-        }
+        } while (microtime(true) < $deadline);
         $this->logger->debug("YDB DEBUG end while");
         throw $lastException;
     }

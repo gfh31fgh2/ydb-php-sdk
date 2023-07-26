@@ -1,11 +1,9 @@
 <?php
 
 namespace YdbPlatform\Ydb\Test;
-error_reporting(E_ALL^E_DEPRECATED);
+
 use PHPUnit\Framework\TestCase;
 use YdbPlatform\Ydb\Auth\Implement\AnonymousAuthentication;
-use YdbPlatform\Ydb\Logger\SimpleFileLogger;
-use YdbPlatform\Ydb\Logger\SimpleStdLogger;
 use YdbPlatform\Ydb\Retry\RetryParams;
 use YdbPlatform\Ydb\Session;
 use YdbPlatform\Ydb\Table;
@@ -48,7 +46,7 @@ class RetryOnExceptionTest extends TestCase
             'credentials' => new AnonymousAuthentication()
         ];
 
-        $ydb = new Ydb($config, new SimpleFileLogger(7, "x.log"));
+        $ydb = new Ydb($config);
         $table = $ydb->table();
 
         $session = $table->createSession();
@@ -63,7 +61,7 @@ class RetryOnExceptionTest extends TestCase
     private function retryTest(Table $table)
     {
         $i = 0;
-        $table->retryTransaction(function (Session $session) use ($table, &$i){
+        $table->retrySession(function (Session $session) use ($table, &$i){
             $i++;
             if($i==1) {
                 $newSessionId = SessionManager::getSessionId($session);
