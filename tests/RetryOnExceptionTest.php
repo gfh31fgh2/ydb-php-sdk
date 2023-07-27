@@ -3,7 +3,10 @@
 namespace YdbPlatform\Ydb\Test;
 
 use PHPUnit\Framework\TestCase;
+use YdbPlatform\Ydb\Auth\EnvironCredentials;
 use YdbPlatform\Ydb\Auth\Implement\AnonymousAuthentication;
+use YdbPlatform\Ydb\Auth\Implement\JwtWithJsonAuthentication;
+use YdbPlatform\Ydb\Logger\SimpleStdLogger;
 use YdbPlatform\Ydb\Retry\RetryParams;
 use YdbPlatform\Ydb\Session;
 use YdbPlatform\Ydb\Table;
@@ -46,7 +49,7 @@ class RetryOnExceptionTest extends TestCase
             'credentials' => new AnonymousAuthentication()
         ];
 
-        $ydb = new Ydb($config);
+        $ydb = new Ydb($config, new SimpleStdLogger(SimpleStdLogger::DEBUG));
         $table = $ydb->table();
 
         $session = $table->createSession();
@@ -61,7 +64,7 @@ class RetryOnExceptionTest extends TestCase
     private function retryTest(Table $table)
     {
         $i = 0;
-        $table->retrySession(function (Session $session) use ($table, &$i){
+        $table->retryTransaction(function (Session $session) use ($table, &$i){
             $i++;
             if($i==1) {
                 $newSessionId = SessionManager::getSessionId($session);

@@ -31,11 +31,13 @@ class Jwt
     /**
      * @param string $privateKey
      * @param string $keyId
+     * @param \Psr\Log\LoggerInterface $logger
      */
-	public function __construct($privateKey, $keyId)
+	public function __construct($privateKey, $keyId, $logger)
 	{
 		$this->privateKey = $privateKey;
 		$this->header['kid'] = $keyId;
+        $this->logger = $logger;
 	}
 
     /**
@@ -83,6 +85,7 @@ class Jwt
      */
 	public function getToken()
 	{
+        $this->logger->debug("YDB start getToken");
         $segments = [];
 
         $segments[] = $this->urlEncode($this->header);
@@ -98,8 +101,10 @@ class Jwt
      */
 	public function sign($input)
 	{
+        $this->logger->debug("YDB start sign");
         if (class_exists(LegacyRSA::class))
         {
+            $this->logger->debug("YDB: LegacyRSA exist");
             $rsa = new LegacyRSA;
             $rsa->loadKey($this->privateKey);
             $rsa->setHash('sha256');
@@ -108,11 +113,14 @@ class Jwt
         }
         else
         {
+            $this->logger->debug("YDB: LegacyRSA not exist");
             $rsa = PublicKeyLoader::load($this->privateKey);
             $rsa->withPadding(RSA::SIGNATURE_PSS);
         }
-
-        return $rsa->sign($input);
+        $this->logger->debug("YDB loaded RSA ".get_class($rsa));
+        $output  = $rsa->sign($input);
+        $this->logger->debug("YDB singed token");
+        return $output;
 	}
 
     /**

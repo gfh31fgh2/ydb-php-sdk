@@ -20,7 +20,7 @@ abstract class JwtAuth extends IamAuth
     {
         $now = new DateTimeImmutable;
 
-        $token = (new Jwt($this->private_key, $this->key_id))
+        $token = (new Jwt($this->private_key, $this->key_id, $this->logger))
             ->issuedBy($this->service_account_id)
             ->issuedAt($now)
             ->expiresAt($now->modify('+1 hour'))
